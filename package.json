@@ -1,0 +1,26 @@
+{
+  "name": "nail-service",
+  "version": "1.0.0",
+  "description": "RESTApi Nail service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "otp",
+    "nodejs",
+    "restapi",
+    "jwt"
+  ],
+  "author": "Yaroslav Shcherban",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.6.7",
+    "mongoose-role": "^3.0.3",
+    "swagger-ui-express": "^4.0.7"
+  }
+}
