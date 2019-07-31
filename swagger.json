@@ -1,0 +1,99 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Nail Service RESTApi v.1.0",
+    "description": "Imagination is more important than knowledge. Albert Einstein",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "http://95.214.63.131:32770",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user in system",
+        "description": "Create new user in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully created"
+          }
+        }
+      }
+    },
+    "/users/clients": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Outputs list of clients",
+          "responses": {
+            "200": {
+              "description": "List of clients"
+            }
+          }
+        }
+    },
+    "/users/masters": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Outputs list of masters",
+          "responses": {
+            "200": {
+              "description": "List of masters"
+            }
+          }
+        }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": [
+        "phone",
+        "password",
+        "role"
+      ],
+      "properties": {
+        "phone": {
+          "type": "number",
+          "uniqueItems": true
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
