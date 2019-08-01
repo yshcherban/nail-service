@@ -4,9 +4,9 @@ const path = require('path');
 const updateUserFields = (req, res, next) => {
   const userId = req.params.id;
   const body = req.body;
-  const coverImgPath = req.file.path.split(path.sep).slice(1).join('/');
 
-  if (coverImgPath) {
+  if (req.file) {
+    const coverImgPath = req.file.path.split(path.sep).slice(1).join('/');
     const cover = {
       cover: coverImgPath
     };
