@@ -48,6 +48,32 @@
         }
       }
     },
+    "/users/{userId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user from system",
+        "description": "Delete user from system",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "string",
+            "required": "true",
+            "description": "UserId that we want to remove from sytem"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully removed"
+          }
+        }
+      }
+    },
     "/users/clients": {
         "get": {
           "tags": [

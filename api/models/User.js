@@ -13,7 +13,9 @@ const UserSchema = new Schema({
   phone: {type: Number, required: true, unique: true},
   avatar: String,
   portfolio: [{
-    type: String
+    _id: {type: Schema.Types.ObjectId},
+    imagePath: {type: String},
+    date: Date
   }],
   cover: String,
   password: {type: String, required: true},
@@ -27,6 +29,7 @@ const UserSchema = new Schema({
   meta: {
     votes: Number,
     testimonials: [{
+      _id: {type: Schema.Types.ObjectId},
       customerFirstName: {type: String},
       body: {type: String},
       date: Date
@@ -37,6 +40,10 @@ const UserSchema = new Schema({
     type: Number
   }
 });
+
+function portfolioLimit(val) {
+  return val.length <= 300;
+}
 
 UserSchema.pre('save', function(next) {
     const user = this;

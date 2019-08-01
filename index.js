@@ -4,12 +4,14 @@ const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI, {
   useCreateIndex: true,
-  useNewUrlParser: true 
+  useNewUrlParser: true,
+  useFindAndModify: false
 });
 
 const app = express();
 const port = 3000;
 
+app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 require('./api/routes')(app);
