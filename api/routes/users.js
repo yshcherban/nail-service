@@ -5,6 +5,8 @@ const { getClients } = require('../controllers');
 const { getMasters } = require('../controllers');
 const { updateUserFields } = require('../controllers');
 const { deleteUser } = require('../controllers');
+const { addFeedbackToUser } = require('../controllers');
+
 
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -34,33 +36,42 @@ const upload = multer({
 //   { portfolio: 'portfolio', maxCount: 300 }
 // ]);
 
+// Info
 router.get('/', (req, res) => {
   res.send('Nail Service v.1.0');
 });
 
+// Get clients
 router.get('/clients', (req, res, next) => {
   getClients(req, res, next);
 });
 
+// Get masters
 router.get('/masters', (req, res, next) => {
   getMasters(req, res, next);
 });
 
+// Create user
+router.post('/', (req, res, next) => {
+  createUser(req, res, next);
+});
+
+// Update user
 router.put('/:id', upload.single('cover'), (req, res, next) => {
   updateUserFields(req, res, next);
 });
 
+// Delete user
 router.delete('/:id', (req, res, next) => {
   deleteUser(req, res, next);
 });
 
-router.get('/:id/testimonials', (req, res) => {
-  console.log('Testimonials');
+// Testimonials
+router.put('/:id/testimonials', (req, res, next) => {
+  addFeedbackToUser(req, res, next);
 });
 
-router.post('/', (req, res, next) => {
-  createUser(req, res, next);
-});
+
 
 
 module.exports = router;
