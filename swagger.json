@@ -49,6 +49,41 @@
       }
     },
     "/users/{userId}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update existing user in system",
+        "description": "Update existing user in system",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "required": "true",
+            "description": "UserID that we want to update"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User data to update",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated user object"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Users"
