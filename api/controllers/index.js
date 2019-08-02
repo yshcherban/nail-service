@@ -4,3 +4,4 @@ module.exports.getMasters = require('./getMasters');
 module.exports.deleteUser = require('./deleteUser');
 module.exports.updateUserFields = require('./updateUserFields');
 module.exports.addFeedbackToUser = require('./addFeedbackToUser');
+module.exports.deleteFeedback = require('./deleteFeedback');

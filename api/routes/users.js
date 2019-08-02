@@ -6,6 +6,7 @@ const { getMasters } = require('../controllers');
 const { updateUserFields } = require('../controllers');
 const { deleteUser } = require('../controllers');
 const { addFeedbackToUser } = require('../controllers');
+const { deleteFeedback } = require('../controllers');
 
 
 const multer = require('multer');
@@ -69,6 +70,11 @@ router.delete('/:id', (req, res, next) => {
 // Testimonials
 router.put('/:id/testimonials', (req, res, next) => {
   addFeedbackToUser(req, res, next);
+});
+
+// Delete Feedback
+router.delete('/:id/testimonials/:feedbackId', (req, res, next) => {
+  deleteFeedback(req, res, next);
 });
 
 
