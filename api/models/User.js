@@ -43,10 +43,6 @@ const UserSchema = new Schema({
   }
 });
 
-function portfolioLimit(val) {
-  return val.length <= 300;
-}
-
 UserSchema.pre('save', function(next) {
     const user = this;
     // only hash the password if it has been modified (or is new)

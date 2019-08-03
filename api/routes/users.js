@@ -7,7 +7,8 @@ const { updateUserFields } = require('../controllers');
 const { deleteUser } = require('../controllers');
 const { addFeedbackToUser } = require('../controllers');
 const { deleteFeedback } = require('../controllers');
-
+const { addPhotosToPortfolio } = require('../controllers');
+const { removeImageFromPortfolio } = require('../controllers');
 
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -32,8 +33,12 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-// const cpUpload = upload.fields([
-//   { cover: 'cover', maxCount: 1 },
+const multipleUpload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
+// const cpUpload = multipleUpload.fields([
 //   { portfolio: 'portfolio', maxCount: 300 }
 // ]);
 
@@ -67,6 +72,7 @@ router.delete('/:id', (req, res, next) => {
   deleteUser(req, res, next);
 });
 
+// Need to send to swagger
 // Testimonials
 router.put('/:id/testimonials', (req, res, next) => {
   addFeedbackToUser(req, res, next);
@@ -77,6 +83,15 @@ router.delete('/:id/testimonials/:feedbackId', (req, res, next) => {
   deleteFeedback(req, res, next);
 });
 
+// Add images to portfolio
+router.put('/:id/portfolio', multipleUpload.array('portfolio', 300), (req, res, next) => {
+  addPhotosToPortfolio(req, res, next);
+});
+
+// Remove images from portfolio
+router.delete('/:id/portfolio/:imageId', (req, res, next) => {
+  removeImageFromPortfolio(req, res, next);
+});
 
 
 

@@ -1,7 +1,9 @@
 const User = require('../models/User');
 
 const getMasters = (req, res, next) => {
-  User.find({'role':'master'}).lean().exec( (err, masters) => {
+  User.find({'role':'master'})
+    .lean()
+    .exec( (err, masters) => {
     if (err) {
       res.status(400).json({
         message: err.message

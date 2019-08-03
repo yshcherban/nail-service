@@ -5,3 +5,5 @@ module.exports.deleteUser = require('./deleteUser');
 module.exports.updateUserFields = require('./updateUserFields');
 module.exports.addFeedbackToUser = require('./addFeedbackToUser');
 module.exports.deleteFeedback = require('./deleteFeedback');
+module.exports.addPhotosToPortfolio = require('./addPhotosToPortfolio');
+module.exports.removeImageFromPortfolio = require('./removeImageFromPortfolio');
