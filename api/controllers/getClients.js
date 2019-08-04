@@ -1,7 +1,17 @@
 const User = require('../models/User');
 
 const getClients = (req, res, next) => {
-  User.find({'role':'client'}).lean().exec( (err, clients) => {
+  const skip = Number(req.query.skip);
+  const limit = Number(req.query.limit);
+
+  User
+    .find({
+        role: 'client'
+      },
+      null,
+      {skip, limit}
+    )
+    .lean().exec( (err, clients) => {
     if (err) {
       res.status(400).json({
         message: err.message
@@ -10,6 +20,9 @@ const getClients = (req, res, next) => {
       res.status(200).json(clients);
     }
   });
+
+
+
 };
 
 module.exports = getClients;

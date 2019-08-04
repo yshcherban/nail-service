@@ -37,11 +37,22 @@ const UserSchema = new Schema({
       date: Date
     }]
   },
+  services: [{
+      _id: {type: Schema.Types.ObjectId, auto: true},
+      serviceName: {
+        type: String,
+        enum: ['MANICURE', 'PEDICURE']
+      },
+      isActive: {type: Boolean}
+  }],
   body: {type: String},
   hourlyRate: {
     type: Number
-  }
-});
+  },
+  blocked: Boolean
+},
+{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 UserSchema.pre('save', function(next) {
     const user = this;
