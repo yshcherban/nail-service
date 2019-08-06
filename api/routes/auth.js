@@ -7,8 +7,10 @@ const instagram = new Instagram({
   clientSecret: '7da219767f6c4e548974d8dd2a2049fc',
 });
 
+const redirectUri = 'http://95.214.63.131:32770/api/auth/instagram/callback';
+
 router.get('/instagram', (req, res, next) => {
-  res.redirect(instagram.getAuthorizationUrl('/auth/instagram/callback', { scope: ['basic'] }));
+  res.redirect(instagram.getAuthorizationUrl(redirectUri, { scope: ['basic'] }));
 });
 
 router.get('/instagram/callback', async (req, res, next) => {
