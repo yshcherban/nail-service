@@ -18,6 +18,7 @@ const UserSchema = new Schema({
     date: Date
   }],
   cover: String,
+  instagramId: String,
   password: {type: String, required: true},
   address: {
     name: {type: String},
@@ -49,7 +50,7 @@ const UserSchema = new Schema({
   hourlyRate: {
     type: Number
   },
-  blocked: Boolean
+  inactive: Boolean
 },
 { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
