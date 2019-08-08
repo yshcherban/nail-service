@@ -3,6 +3,7 @@ const User = require('../models/User');
 const getMasters = (req, res, next) => {
   const skip = Number(req.query.skip);
   const limit = Number(req.query.limit);
+  const sortHourlyRate = Number(req.query.sortByHourlyRate);
 
   const hourlyRateGt = Number(req.query.hourlyRateMin);
   const hourlyRateLt = Number(req.query.hourlyRateMax);
@@ -26,8 +27,12 @@ const getMasters = (req, res, next) => {
 
   User.find(
     queryObj,
-    null,
-    {skip, limit}
+    '-password',
+    {skip, limit,
+      sort: {
+        hourlyRate: sortHourlyRate
+      }
+    }
     )
     .lean()
     .exec( (err, masters) => {

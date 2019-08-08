@@ -1,0 +1,6 @@
+{
+  "secret": "4OQwVEaiymdZERV5Ny9x3MIx1M65GuAe",
+  "refreshTokenSecret": "O1kKDIeQS2fdjJVCmAVuwTEBtwUAggpf",
+  "tokenLife": 900,
+  "refreshTokenLife": 86400
+}

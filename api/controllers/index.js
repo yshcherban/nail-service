@@ -9,3 +9,5 @@ module.exports.addPhotosToPortfolio = require('./addPhotosToPortfolio');
 module.exports.removeImageFromPortfolio = require('./removeImageFromPortfolio');
 module.exports.getLocationInfo = require('./getLocationInfo');
 module.exports.getPhotosFromInstagram = require('./getPhotosFromInstagram');
+module.exports.login = require('./login');
+module.exports.sendSmsCode = require('./sendSmsCode');

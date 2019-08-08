@@ -44,6 +44,8 @@ const multipleUpload = multer({
 //   { portfolio: 'portfolio', maxCount: 300 }
 // ]);
 
+//router.use(require('./middlewares/tokenChecker'));
+
 // Info
 router.get('/', (req, res) => {
   res.send('Nail Service v.1.0');

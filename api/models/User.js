@@ -10,7 +10,11 @@ const UserSchema = new Schema({
   },
   firstName: {type: String},
   lastName: {type: String},
-  phone: {type: Number, required: true, unique: true},
+  phone: {
+    type: String,
+    required: true,
+    unique: true
+  },
   avatar: String,
   portfolio: [{
     _id: {type: Schema.Types.ObjectId, auto: true},
@@ -50,10 +54,19 @@ const UserSchema = new Schema({
   hourlyRate: {
     type: Number
   },
-  inactive: Boolean
+  accessToken: String,
+  refreshToken: String,
+  inactive: {type: Boolean, default:0}
 },
 { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
+
+UserSchema.path('phone').validate(function (value) {
+  // Your validation code here, should return bool
+  const regex = RegExp('^[0-9]*$');
+  return regex.test(value);
+}, 'Invalid phone number');
+
 
 UserSchema.pre('save', function(next) {
     const user = this;
