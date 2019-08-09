@@ -4,10 +4,7 @@ const { login } = require('../controllers');
 
 const Instagram = require('node-instagram').default;
 
-const instagram = new Instagram({
-  clientId: ' 2286b1bb3e7d4715a9fb028ae2bd3ea2',
-  clientSecret: '7da219767f6c4e548974d8dd2a2049fc',
-});
+const instagram = new Instagram();
 
 const redirectUri = 'http://95.214.63.131:32770/api/auth/instagram/callback';
 
