@@ -12,5 +12,6 @@ module.exports = (app) => {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/api/users', users);
   app.use('/api', geo);
+  app.use('/api/auth', auth);
   app.use('/api/sms', sms);
 };
