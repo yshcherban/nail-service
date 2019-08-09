@@ -23,7 +23,10 @@ const UserSchema = new Schema({
   }],
   cover: String,
   instagramId: String,
-  password: {type: String, required: true},
+  instagramAccessToken: {
+    type: String,
+    unique: true
+  },
   address: {
     name: {type: String},
     location: {
@@ -44,10 +47,18 @@ const UserSchema = new Schema({
   },
   services: [{
       _id: {type: Schema.Types.ObjectId, auto: true},
-      serviceName: {
+      categoryName: {
         type: String,
-        enum: ['MANICURE', 'PEDICURE']
+        enum: ['MANICURE', 'PEDICURE', 'COVER', 'STRENGTHENING', 'DESIGN']
       },
+      categoryItems: [{
+        categoryName: {
+          type: String,
+          enum: ['MANICURE', 'PEDICURE', 'COVER', 'STRENGTHENING', 'DESIGN']
+        },
+        itemId: {type: Schema.Types.ObjectId, auto: true},
+        itemName: {type: String},
+      }],
       isActive: {type: Boolean}
   }],
   body: {type: String},
@@ -56,7 +67,11 @@ const UserSchema = new Schema({
   },
   accessToken: String,
   refreshToken: String,
-  inactive: {type: Boolean, default:0}
+  inactive: {type: Boolean, default:0},
+  logNumber: {
+    type: Number,
+    default:0
+  }
 },
 { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
@@ -67,33 +82,6 @@ UserSchema.path('phone').validate(function (value) {
   return regex.test(value);
 }, 'Invalid phone number');
 
-
-UserSchema.pre('save', function(next) {
-    const user = this;
-    // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
-
-    // generate a salt
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) return next(err);
-
-        // hash the password using our new salt
-        bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) return next(err);
-
-            // override the cleartext password with the hashed one
-            user.password = hash;
-            next();
-        });
-    });
-});
-
-UserSchema.methods.comparePassword = function(candidatePassword,next) {
-  bcrypt.compare(candidatePassword,this.password, function(err,isMatch) {
-    if(err) return next(err);
-      next(null,isMatch)
-    });
-};
 
 UserSchema.plugin(require('mongoose-role'), {
   roles: ['master', 'client', 'admin'],

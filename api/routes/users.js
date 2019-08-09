@@ -10,6 +10,7 @@ const { deleteFeedback } = require('../controllers');
 const { addPhotosToPortfolio } = require('../controllers');
 const { removeImageFromPortfolio } = require('../controllers');
 const { getPhotosFromInstagram } = require('../controllers');
+const { getMediaFromInstagram } = require('../controllers');
 
 
 const multer = require('multer');
@@ -95,6 +96,10 @@ router.put('/:id/portfolio', multipleUpload.array('portfolio', 300), (req, res, 
 // Remove images from portfolio
 router.delete('/:id/portfolio/:imageId', (req, res, next) => {
   removeImageFromPortfolio(req, res, next);
+});
+
+router.get('/:id/instagram/media', (req, res, next) => {
+  getMediaFromInstagram(req, res, next);
 });
 
 // add geo and auth to swagger
