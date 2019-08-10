@@ -6,6 +6,7 @@ const users = require('./users');
 const geo = require('./geo');
 const auth = require('./auth');
 const sms = require('./sms');
+const admin = require('./admin');
 
 
 module.exports = (app) => {
@@ -14,4 +15,5 @@ module.exports = (app) => {
   app.use('/api', geo);
   app.use('/api/auth', auth);
   app.use('/api/sms', sms);
+  app.use('/api/jezinka', admin);
 };

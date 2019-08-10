@@ -8,7 +8,7 @@ const getClients = (req, res, next) => {
     .find({
         role: 'client'
       },
-      '-password',
+      {'accessToken': 0, 'refreshToken': 0},
       {skip, limit}
     )
     .lean().exec( (err, clients) => {

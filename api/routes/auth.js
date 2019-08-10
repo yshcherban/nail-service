@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { login } = require('../controllers');
+const { logout } = require('../controllers');
 const { setUserInstagramAccessToken } = require('../controllers');
 
 const Instagram = require('node-instagram').default;
@@ -11,9 +12,10 @@ const instagram = new Instagram({
 });
 //http://95.214.63.131:32770
 //http://127.0.0.1:3000
-const redirectUri = 'http://127.0.0.1:3000/api/auth/instagram/callback';
+//const redirectUri = 'http://127.0.0.1:3000/api/auth/instagram/callback';
+const redirectUri = 'http://95.214.63.131:32770/api/auth/instagram/callback';
 
-router.get('/instagram', (req, res, next) => {
+router.get('/instagram', require('./middlewares/tokenChecker'), (req, res, next) => {
   const userId = req.query.userId;
   res.redirect(instagram.getAuthorizationUrl(
     redirectUri, {
@@ -23,7 +25,7 @@ router.get('/instagram', (req, res, next) => {
   ));
 });
 
-router.get('/instagram/callback', async (req, res, next) => {
+router.get('/instagram/callback', require('./middlewares/tokenChecker'), async (req, res, next) => {
   try {
     const userId = req.query.state;
     const data = await instagram.authorizeUser(req.query.code, redirectUri);
@@ -36,6 +38,10 @@ router.get('/instagram/callback', async (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   login(req, res, next);
+});
+
+router.post('/logout', require('./middlewares/tokenChecker'), (req, res, next) => {
+  logout(req, res, next);
 });
 
 router.post('/token', (req, res, next) => {

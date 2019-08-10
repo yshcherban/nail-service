@@ -58,6 +58,7 @@ const UserSchema = new Schema({
         },
         itemId: {type: Schema.Types.ObjectId, auto: true},
         itemName: {type: String},
+        isActive: {type: Boolean}
       }],
       isActive: {type: Boolean}
   }],
@@ -67,7 +68,6 @@ const UserSchema = new Schema({
   },
   accessToken: String,
   refreshToken: String,
-  inactive: {type: Boolean, default:0},
   logNumber: {
     type: Number,
     default:0

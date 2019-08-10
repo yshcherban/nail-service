@@ -13,6 +13,7 @@ const sendSmsCode = (req, res, next) => {
 
   if(regex.test(phoneNumber)) {
     const passwordCode = generateFourDigits();
+    console.log(passwordCode);
 
     Otp
       .find({phone: phoneNumber})
@@ -23,26 +24,62 @@ const sendSmsCode = (req, res, next) => {
         });
       } else {
         if(result.length !== 0) {
+          // if phone exists
           if (result[0].phoneBlocked) {
             res.status(400).json({
               message: "Your account has been blocked."
             });
-          }
-
-          const currentDate = new Date().getTime();
-
-          const updatedDate = result[0].updated_at;
-          updatedDate.setMinutes( updatedDate.getMinutes() + 1 );
-          const timeDatabase = updatedDate.getTime();
-
-          if (currentDate >= timeDatabase) {
-            console.log('proceed');
           } else {
-            res.status(400).json({
-              message: `Please wait 1 minute and try again`
-            });
-          }
+            // Update code (otp)
+            const currentDate = new Date().getTime();
 
+            const updatedDate = result[0].updated_at;
+            updatedDate.setMinutes( updatedDate.getMinutes() + 1 );
+            const timeDatabase = updatedDate.getTime();
+
+            if (currentDate >= timeDatabase) {
+              Otp
+                .findOne(
+                  {phone: phoneNumber},
+                  (err, otp) => {
+                    if (err) {
+                      res.status(400).json({
+                        message: err.message
+                      });
+                    } else {
+                      otp.passwordCode = passwordCode;
+                      otp.save(function (err) {
+                        if (err) {
+                          res.status(400).json({
+                            message: err.message
+                          });
+                        } else {
+                          send_sms({
+                              phones : phoneNumber,
+                              mes : `Ваш код: ${passwordCode}`,
+                          }, function (data, raw, err, code) {
+                              if (err) {
+                                res.status(400).json({
+                                  message: "Password has not send. Please contact site owner"
+                                });
+                              } else {
+                                res.status(200).json({
+                                  message: "New password successfully sent"
+                                });
+                              }
+                          });
+                        }
+                      });
+                    }
+                  }
+                )
+            } else {
+              res.status(400).json({
+                message: `Please wait 1 minute and try again`
+              });
+            }
+
+          }
 
         } else {
           // Create phone number
@@ -58,8 +95,19 @@ const sendSmsCode = (req, res, next) => {
                 message: err.message
               });
             } else {
-              res.status(200).json({
-                message: "Otp successfully sent"
+              send_sms({
+                  phones : phoneNumber,
+                  mes : `Ваш код: ${passwordCode}`,
+              }, function (data, raw, err, code) {
+                  if (err) {
+                    res.status(400).json({
+                      message: "Password has not send. Please contact site owner"
+                    });
+                  } else {
+                    res.status(200).json({
+                      message: "Password successfully sent"
+                    });
+                  }
               });
             }
           });
@@ -68,21 +116,6 @@ const sendSmsCode = (req, res, next) => {
         }
       }
     });
-
-
-
-
-
-
-
-    // send_sms({
-    //     phones : phoneNumber,
-    //     mes : `Ваш код: ${generateFourDigits()}`,
-    // }, function (data, raw, err, code) {
-    //     if (err) return console.log(err, 'code: '+code);
-    //     console.log(data); // object
-    //     console.log(raw); // string in JSON format
-    // });
 
   } else {
     res.status(400).json({
@@ -93,34 +126,3 @@ const sendSmsCode = (req, res, next) => {
 };
 
 module.exports = sendSmsCode;
-
-
-
-
-
-// Отправка SMS
-// smsc.send_sms({
-//     phones : ['79999999999', '79999999999'],
-//     mes : 'Привет!',
-//     cost : 1
-// }, function (data, raw, err, code) {
-//     if (err) return console.log(err, 'code: '+code);
-//     console.log(data); // object
-//     console.log(raw); // string in JSON format
-// });
-//
-// // Получение баланса
-// smsc.get_balance(function (balance, raw, err, code) {
-// if (err) return console.log(err, 'code: '+code);
-//     console.log(balance);
-// });
-//
-// // Получение статуса сообщений
-// smsc.get_status({
-//     phones : 79999999999,
-//     id : 111,
-//     all : 1
-// }, function (status, raw, err, code) {
-// if (err) return console.log(err, 'code: '+code);
-//     console.log(status);
-// });

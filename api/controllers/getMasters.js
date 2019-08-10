@@ -27,7 +27,7 @@ const getMasters = (req, res, next) => {
 
   User.find(
     queryObj,
-    '-password',
+    {'accessToken': 0, 'refreshToken': 0},
     {skip, limit,
       sort: {
         hourlyRate: sortHourlyRate

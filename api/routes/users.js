@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router();
-const { createUser } = require('../controllers');
 const { getClients } = require('../controllers');
 const { getMasters } = require('../controllers');
 const { updateUserFields } = require('../controllers');
@@ -47,58 +46,48 @@ const multipleUpload = multer({
 
 //router.use(require('./middlewares/tokenChecker'));
 
-// Info
-router.get('/', (req, res) => {
-  res.send('Nail Service v.1.0');
-});
-
 // Get clients
-router.get('/clients', (req, res, next) => {
+router.get('/clients', require('./middlewares/tokenChecker'), (req, res, next) => {
   getClients(req, res, next);
 });
 
 // Get masters
-router.get('/masters', (req, res, next) => {
+router.get('/masters', require('./middlewares/tokenChecker'), (req, res, next) => {
   getMasters(req, res, next);
 });
 
-// Create user
-router.post('/', (req, res, next) => {
-  createUser(req, res, next);
-});
-
 // Update user
-router.put('/:id', upload.single('cover'), (req, res, next) => {
+router.put('/:id', require('./middlewares/tokenChecker'), upload.single('cover'), (req, res, next) => {
   updateUserFields(req, res, next);
 });
 
 // Delete user
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', require('./middlewares/tokenChecker'), (req, res, next) => {
   deleteUser(req, res, next);
 });
 
 // Need to send to swagger
 // Testimonials
-router.put('/:id/testimonials', (req, res, next) => {
+router.put('/:id/testimonials', require('./middlewares/tokenChecker'), (req, res, next) => {
   addFeedbackToUser(req, res, next);
 });
 
 // Delete Feedback
-router.delete('/:id/testimonials/:feedbackId', (req, res, next) => {
+router.delete('/:id/testimonials/:feedbackId', require('./middlewares/tokenChecker'), (req, res, next) => {
   deleteFeedback(req, res, next);
 });
 
 // Add images to portfolio
-router.put('/:id/portfolio', multipleUpload.array('portfolio', 300), (req, res, next) => {
+router.put('/:id/portfolio', require('./middlewares/tokenChecker'), multipleUpload.array('portfolio', 300), (req, res, next) => {
   addPhotosToPortfolio(req, res, next);
 });
 
 // Remove images from portfolio
-router.delete('/:id/portfolio/:imageId', (req, res, next) => {
+router.delete('/:id/portfolio/:imageId', require('./middlewares/tokenChecker'), (req, res, next) => {
   removeImageFromPortfolio(req, res, next);
 });
 
-router.get('/:id/instagram/media', (req, res, next) => {
+router.get('/:id/instagram/media', require('./middlewares/tokenChecker'), (req, res, next) => {
   getMediaFromInstagram(req, res, next);
 });
 

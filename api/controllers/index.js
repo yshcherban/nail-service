@@ -1,4 +1,3 @@
-module.exports.createUser = require('./createUser');
 module.exports.getClients = require('./getClients');
 module.exports.getMasters = require('./getMasters');
 module.exports.deleteUser = require('./deleteUser');
@@ -13,3 +12,6 @@ module.exports.login = require('./login');
 module.exports.sendSmsCode = require('./sendSmsCode');
 module.exports.setUserInstagramAccessToken = require('./setUserInstagramAccessToken');
 module.exports.getMediaFromInstagram = require('./getMediaFromInstagram');
+module.exports.logout = require('./logout');
+module.exports.freezeUser = require('./freezeUser');
+module.exports.unfreezeUser = require('./unfreezeUser');
