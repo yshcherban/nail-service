@@ -3,6 +3,9 @@ const router = express.Router();
 const { login } = require('../controllers');
 const { logout } = require('../controllers');
 const { setUserInstagramAccessToken } = require('../controllers');
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const config = require('./middlewares/config');
 
 const Instagram = require('node-instagram').default;
 
@@ -44,25 +47,43 @@ router.post('/logout', require('./middlewares/tokenChecker'), (req, res, next) =
   logout(req, res, next);
 });
 
-router.post('/token', (req, res, next) => {
-    // refresh the damn token
-    const postData = req.body
-    // if refresh token exists
-    if((postData.refreshToken) && (postData.refreshToken in tokenList)) {
-        const user = {
-            "email": postData.email,
-            "name": postData.name
+router.post('/token', require('./middlewares/tokenChecker'), (req, res, next) => {
+  const userId = req.userId;
+  const refreshToken = req.refreshToken;
+
+  User
+    .findOne(
+      {_id: userId, refreshToken: refreshToken},
+      (err, user) => {
+        if (err) {
+          res.status(400).json({
+            message: err.message
+          });
+        } else {
+          if (user) {
+            const systemUser = {
+              "userId": user._id,
+              "phone": user.phone
+            };
+            
+            const token = jwt.sign(systemUser, config.secret, { expiresIn: config.tokenLife})
+            user.accessToken = token;
+            user.save(function (err, user) {
+              if (err) {
+                res.status(400).json({
+                  message: err.message
+                });
+              } else {
+                res.status(200).json({'new_access_token': user.accessToken});
+              }}
+            );
+        } else {
+          res.status(400).json({
+            message: "User or Refresh Token not found"
+          });
         }
-        const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife})
-        const response = {
-            "token": token,
-        }
-        // update the token in the list
-        tokenList[postData.refreshToken].token = token
-        res.status(200).json(response);
-    } else {
-        res.status(404).send('Invalid request')
-    }
+
+        }})
 })
 
 module.exports = router;

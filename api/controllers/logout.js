@@ -6,8 +6,7 @@ const logout = (req, res, next) => {
   User.findByIdAndUpdate(userId, {
     $set: {
       "accessToken": "",
-      "refreshToken": "",
-      "logNumber": 0 // user can login with old password - need to fix
+      "refreshToken": ""
     }
   },(err, user) => {
     if (err) {

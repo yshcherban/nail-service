@@ -67,11 +67,7 @@ const UserSchema = new Schema({
     type: Number
   },
   accessToken: String,
-  refreshToken: String,
-  logNumber: {
-    type: Number,
-    default:0
-  }
+  refreshToken: String
 },
 { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
@@ -84,11 +80,10 @@ UserSchema.path('phone').validate(function (value) {
 
 
 UserSchema.plugin(require('mongoose-role'), {
-  roles: ['master', 'client', 'admin'],
+  roles: ['master', 'client'],
   accessLevels: {
     master: ['master'],
-    client: ['client'],
-    admin: ['admin']
+    client: ['client']
   }
 });
 

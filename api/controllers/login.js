@@ -41,47 +41,39 @@ const login = (req, res, next) => {
                                   });
                                 } else {
                                   if (user) {
-                                    if(user.logNumber > 0) {
-                                      res.status(400).json({
-                                        message: "Sorry, your password expired"
-                                      });
-                                    } else {
-                                      const systemUser = {
-                                        "phone": phone,
-                                        "password": password
-                                      };
-
-                                      const token = jwt.sign(systemUser, config.secret, { expiresIn: config.tokenLife})
-                                      const refreshToken = jwt.sign(systemUser, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife})
-
-                                      user.accessToken = token;
-                                      user.refreshToken = refreshToken;
-                                      user.logNumber = 1;
-                                      user.save(function (err, user) {
-                                        if (err) {
-                                          res.status(400).json({
-                                            message: err.message
-                                          });
-                                        } else {
-                                          res.status(200).json(user);
-                                      }});
-                                    }
-
-                                  } else {
                                     const systemUser = {
+                                      "userId": user._id,
                                       "phone": phone,
-                                      "password": password
                                     };
-                                    
+
                                     const token = jwt.sign(systemUser, config.secret, { expiresIn: config.tokenLife})
                                     const refreshToken = jwt.sign(systemUser, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife})
 
+                                    user.accessToken = token;
+                                    user.refreshToken = refreshToken;
+                                    user.save(function (err, user) {
+                                      if (err) {
+                                        res.status(400).json({
+                                          message: err.message
+                                        });
+                                      } else {
+                                        // Remove password
+                                        otp.passwordCode = 'undefined'; // clear password
+                                        otp.save(function (err, user) {
+                                          if (err) {
+                                            res.status(400).json({
+                                              message: err.message
+                                            });
+                                          } else {
+                                            res.status(200).json(user);
+                                        }});
+                                    }});
+
+                                  } else {
+
                                     const user = new User({
                                       phone: phone,
-                                      role: 'client',
-                                      accessToken: token,
-                                      refreshToken: refreshToken,
-                                      logNumber: 1
+                                      role: 'client'
                                     });
 
                                     user.save(function (err, user) {
@@ -90,7 +82,34 @@ const login = (req, res, next) => {
                                           message: err.message
                                         });
                                       } else {
-                                        res.status(200).json(user);
+                                        const systemUser = {
+                                          "userId": user._id,
+                                          "phone": phone
+                                        };
+
+                                        const token = jwt.sign(systemUser, config.secret, { expiresIn: config.tokenLife})
+                                        const refreshToken = jwt.sign(systemUser, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife})
+
+                                        user.accessToken = token;
+                                        user.refreshToken = refreshToken
+
+                                        user.save(function (err, user) {
+                                          if (err) {
+                                            res.status(400).json({
+                                              message: err.message
+                                            });
+                                          } else {
+                                            // Remove password
+                                            otp.passwordCode = 'undefined'; // clear password
+                                            otp.save(function (err, otp) {
+                                              if (err) {
+                                                res.status(400).json({
+                                                  message: err.message
+                                                });
+                                              } else {
+                                                res.status(200).json(user);
+                                            }});
+                                          }});
                                     }});
 
                                   }
